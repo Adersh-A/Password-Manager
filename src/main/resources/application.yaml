@@ -4,6 +4,8 @@ spring:
       uri: mongodb://localhost:27017/passWordDB
       database: passWordDB
 
+
 jwt:
   secret: fD0ZpPEqufTvC/N/8+xFje7RPH9vM0K9+uG7rM8fV9oEVkgZa9D4bNkN1LKg0ZVq+fQlG7Uq6F7tOG1WqSgF0Q==
+
 

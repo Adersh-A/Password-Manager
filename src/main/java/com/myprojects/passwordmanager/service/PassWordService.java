@@ -33,7 +33,6 @@ public class PassWordService {
 
     public void savePassWord(PasswordDto passwordDto){
         UserModel userModel = new UserModel();
-//        userModel.setUserName("adersh");
         userModel.setUserName(getLoggedInUser().getEmail());
         UserModel userDetails = passWordRepository.findUserByUserName(userModel.getUserName());
 

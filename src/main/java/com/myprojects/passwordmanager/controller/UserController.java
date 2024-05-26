@@ -3,6 +3,7 @@ package com.myprojects.passwordmanager.controller;
 import com.myprojects.passwordmanager.dto.AuthDto;
 import com.myprojects.passwordmanager.dto.JwtDto;
 import com.myprojects.passwordmanager.dto.UserDto;
+import com.myprojects.passwordmanager.exception.AuthenticationException;
 import com.myprojects.passwordmanager.security.CustomUserDetailsService;
 import com.myprojects.passwordmanager.service.UserService;
 import com.myprojects.passwordmanager.util.JwtTokenUtil;
@@ -51,9 +52,9 @@ public class UserController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (DisabledException e) {
-            throw new Exception("User disabled");
+            throw new AuthenticationException("User disabled",e);
         } catch (BadCredentialsException e) {
-            throw new Exception("Bad Credentials");
+            throw new AuthenticationException("Bad Credentials",e);
         }
 
     }

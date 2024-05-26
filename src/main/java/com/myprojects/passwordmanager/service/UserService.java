@@ -1,6 +1,7 @@
 package com.myprojects.passwordmanager.service;
 
 import com.myprojects.passwordmanager.dto.UserDto;
+import com.myprojects.passwordmanager.exception.UserServiceException;
 import com.myprojects.passwordmanager.model.User;
 import com.myprojects.passwordmanager.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
@@ -24,8 +25,8 @@ public class UserService {
     }
     public void saveUser(UserDto userDto){
 
-        if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new RuntimeException("User is already register with email:"+userDto.getEmail());
+        if (Boolean.TRUE.equals(userRepository.existsByEmail(userDto.getEmail()))) {
+            throw new UserServiceException("User is already register with email:"+userDto.getEmail());
         }
         User newUser = new User();
         BeanUtils.copyProperties(userDto, newUser);
