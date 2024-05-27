@@ -1,6 +1,7 @@
 package com.myprojects.passwordmanager.util;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+
 public class EncryptionUtils {
 
     private static final String ENCRYPTION_KEY = System.getenv("ENCRYPTION_KEY"); // Use a secure key here
@@ -13,6 +14,9 @@ public class EncryptionUtils {
         }
         textEncryptor.setPassword(ENCRYPTION_KEY);
         textEncryptor.setAlgorithm("PBEWithMD5AndDES");
+    }
+
+    private EncryptionUtils() {
     }
 
     public static String encrypt(String input) {

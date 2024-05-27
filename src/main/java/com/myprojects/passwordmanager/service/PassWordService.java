@@ -25,33 +25,11 @@ public class PassWordService {
 
     private final PassWordRepository passWordRepository;
     private final UserRepository userRepository;
+
     public PassWordService(PassWordRepository passWordRepository,
-                           UserRepository userRepository){
+                           UserRepository userRepository) {
         this.passWordRepository = passWordRepository;
         this.userRepository = userRepository;
-    }
-
-    public void savePassWord(PasswordDto passwordDto){
-        UserModel userModel = new UserModel();
-        userModel.setUserName(getLoggedInUser().getEmail());
-        UserModel userDetails = passWordRepository.findUserByUserName(userModel.getUserName());
-
-        if(Objects.nonNull(userDetails)){
-            log.info("user entry already exists, adding password to list");
-            boolean isAppNameAlreadyExists = userDetails.getPassWordList().stream().
-                    anyMatch(passWord -> passWord.getAppName().equals(passwordDto.getAppName()));
-            if(isAppNameAlreadyExists){
-                throw new RuntimeException("entry already exists, pls update ");
-            }
-            userDetails.getPassWordList().add(getPassWord(passwordDto));
-            userModel = userDetails;
-        }else {
-            log.info("no passwords for user");
-            userModel.setPassWordList(List.of(getPassWord(passwordDto)));
-
-        }
-
-        passWordRepository.save(userModel);
     }
 
     private static PassWord getPassWord(PasswordDto passwordDto) {
@@ -63,16 +41,38 @@ public class PassWordService {
                 build();
     }
 
+    public void savePassWord(PasswordDto passwordDto) {
+        UserModel userModel = new UserModel();
+        userModel.setUserName(getLoggedInUser().getEmail());
+        UserModel userDetails = passWordRepository.findUserByUserName(userModel.getUserName());
 
-    public PasswordDto getPassWord(String appName){
+        if (Objects.nonNull(userDetails)) {
+            log.info("user entry already exists, adding password to list");
+            boolean isAppNameAlreadyExists = userDetails.getPassWordList().stream().
+                    anyMatch(passWord -> passWord.getAppName().equals(passwordDto.getAppName()));
+            if (isAppNameAlreadyExists) {
+                throw new RuntimeException("entry already exists, pls update ");
+            }
+            userDetails.getPassWordList().add(getPassWord(passwordDto));
+            userModel = userDetails;
+        } else {
+            log.info("no passwords for user");
+            userModel.setPassWordList(List.of(getPassWord(passwordDto)));
+
+        }
+
+        passWordRepository.save(userModel);
+    }
+
+    public PasswordDto getPassWord(String appName) {
         UserModel userModel = passWordRepository.findUserByUserName(getLoggedInUser().getEmail());
         Optional<PassWord> passWord = userModel.getPassWordList().stream().filter(pw -> pw.getAppName().equals(appName)).findAny();
-        if(passWord.isPresent()){
+        if (passWord.isPresent()) {
             return PasswordDto.builder().
                     appName(appName).
                     passWord(EncryptionUtils.decrypt(passWord.get().getPassWord())).
                     build();
-        }else {
+        } else {
             throw new RuntimeException("app pass word not found!!");
         }
     }
@@ -82,6 +82,6 @@ public class PassWordService {
 
         String email = authentication.getName();
 
-        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found for the email"+email));
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found for the email" + email));
     }
 }

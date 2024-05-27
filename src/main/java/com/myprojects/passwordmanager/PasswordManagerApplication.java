@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 @EnableMongoAuditing
 public class PasswordManagerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PasswordManagerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PasswordManagerApplication.class, args);
+    }
 
 }

@@ -14,7 +14,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
@@ -24,14 +27,15 @@ public class UserController {
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
+
     public UserController(UserService userService,
                           CustomUserDetailsService customUserDetailsService,
                           JwtTokenUtil jwtTokenUtil,
-                          AuthenticationManager authenticationManager){
-       this.userService = userService;
-       this.userDetailsService = customUserDetailsService;
-       this.jwtTokenUtil = jwtTokenUtil;
-       this.authenticationManager = authenticationManager;
+                          AuthenticationManager authenticationManager) {
+        this.userService = userService;
+        this.userDetailsService = customUserDetailsService;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/login")
@@ -52,15 +56,15 @@ public class UserController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (DisabledException e) {
-            throw new AuthenticationException("User disabled",e);
+            throw new AuthenticationException("User disabled", e);
         } catch (BadCredentialsException e) {
-            throw new AuthenticationException("Bad Credentials",e);
+            throw new AuthenticationException("Bad Credentials", e);
         }
 
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto){
+    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
         userService.saveUser(userDto);
         return ResponseEntity.ok("user cretaed");
     }

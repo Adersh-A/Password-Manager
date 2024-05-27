@@ -1,12 +1,12 @@
 package com.myprojects.passwordmanager.exception;
 
-public class AuthenticationException extends RuntimeException{
+public class AuthenticationException extends RuntimeException {
 
-    public AuthenticationException(String message){
+    public AuthenticationException(String message) {
         super(message);
     }
 
-    public AuthenticationException(String message,Throwable e){
-        super(message,e);
+    public AuthenticationException(String message, Throwable e) {
+        super(message, e);
     }
 }
